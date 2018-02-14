@@ -41,6 +41,7 @@ namespace TechJobsConsole
                     else
                     {
                         List<string> results = JobData.FindAll(columnChoice);
+                        results.Sort();
 
                         Console.WriteLine("\n*** All " + columnChoices[columnChoice] + " Values ***");
                         foreach (string item in results)
@@ -63,12 +64,29 @@ namespace TechJobsConsole
                     // Fetch results
                     if (columnChoice.Equals("all"))
                     {
-                        Console.WriteLine("Search all fields not yet implemented.");
+                        //Kyla edited these codeblocks to display error messages and FindByValue results.
+                        searchResults = JobData.FindByValue(searchTerm);
+
+                        if (searchResults.Count == 0)
+                        {
+                            Console.WriteLine("\nNo Results.");
+                        } else
+                        {
+                            PrintJobs(searchResults);
+                        }
                     }
                     else
                     {
                         searchResults = JobData.FindByColumnAndValue(columnChoice, searchTerm);
-                        PrintJobs(searchResults);
+
+                        if (searchResults.Count == 0)
+                        {
+                            Console.WriteLine("\nNo results.");
+                        } else
+                        {
+                            PrintJobs(searchResults);
+                        }
+
                     }
                 }
             }
@@ -79,6 +97,7 @@ namespace TechJobsConsole
          */
         private static string GetUserSelection(string choiceHeader, Dictionary<string, string> choices)
         {
+
             int choiceIdx;
             bool isValidChoice = false;
             string[] choiceKeys = new string[choices.Count];
@@ -116,9 +135,20 @@ namespace TechJobsConsole
             return choiceKeys[choiceIdx];
         }
 
+        //Kyla wrote this. Functional.
         private static void PrintJobs(List<Dictionary<string, string>> someJobs)
         {
-            Console.WriteLine("printJobs is not implemented yet");
+
+            foreach (var job in someJobs)
+            {
+                Console.WriteLine("\n*****");
+                foreach (var key in job.Keys)
+                {
+                    Console.WriteLine("{0}: {1}", key, job[key]);
+                }
+                Console.WriteLine("*****");
+
+            }
         }
     }
 }
